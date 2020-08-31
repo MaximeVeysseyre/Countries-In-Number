@@ -1,5 +1,5 @@
 CREATE PROCEDURE fake_country (
-    IN fake_country_name VARCHAR
+IN fake_country_name VARCHAR
 )
 LANGUAGE plpgsql
 AS $$
