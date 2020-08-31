@@ -4,4 +4,5 @@ CREATE TABLE IF NOT EXISTS "country"
     pop INTEGER NOT NULL,
     density INTEGER NOT NULL,
     land_area INTEGER NOT NULL
+    insertion_date TIMESTAMP DEFAULT NOW()
 );
