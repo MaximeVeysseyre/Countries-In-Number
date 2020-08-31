@@ -27,5 +27,6 @@ END; $$;
 
 SELECT * FROM country_infos ('France');
 
-
-DROP FUNCTION country_infos (country_choice VARCHAR);
+SELECT * FROM country_infos ('Kanto');
+SELECT * FROM country_infos ('Johto');
+SELECT * FROM country_infos ('Hoenn');

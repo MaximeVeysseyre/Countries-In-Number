@@ -11,6 +11,3 @@ END; $$;
 CALL fake_country('Kanto');
 CALL fake_country('Johto');
 CALL fake_country('Hoenn');
-
-
-DROP PROCEDURE fake_country;
