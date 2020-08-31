@@ -14,9 +14,3 @@ CALL fake_country('Hoenn');
 
 
 DROP PROCEDURE fake_country;
-
-
-INSERT fake_country_name INTO country.country_name,
-INSERT TRUNC(10000000 * RAND()) INTO country.pop,
-INSERT TRUNC(1000 * RAND()) INTO country.density,
-INSERT TRUNC(10000000 * RAND()) INTO country.land_area
