@@ -5,6 +5,7 @@
 Projet individuel "Les pays en chiffres".
 
 Utilisation obligatoire de PostGreSQL ainsi que du SaaS ElephantSQL. 
+
 Interdiction de l'utilisation de Python.
 
 Récolte d'informations basiques sur les pays ainsi que manipulation des données.
@@ -28,15 +29,41 @@ country_name VARCHAR PRIMARY KEY,
 pop INTEGER NOT NULL,
 density INTEGER NOT NULL,
 land_area INTEGER NOT NULL,
-insertion_date TIMESTAMP DEFAULT NOW()
-); 
+insertion_date TIMESTAMP
+);
 ```
+
+
+### Création d'une fonction SQL "add_insertion_date"
+
+*Il s'agit de la fonction appelée par le trigger (Voir étape suivante).*
+
+```sql
+CREATE FUNCTION add_insertion_date()
+RETURNS trigger 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+NEW.insertion_date := current_timestamp;
+RETURN NEW;
+END; $$; 
+```
+
+
+### Création d'un trigger "insertion_date"
+
+```sql
+CREATE TRIGGER trigger_insertion_date
+BEFORE INSERT OR UPDATE
+ON country
+FOR EACH ROW
+EXECUTE FUNCTION add_insertion_date(); 
+```
+
 
 ### Insertion des données dans la table "country"
 
-Se rendre dans l'onglet "Backup" d'ElephantSQL puis "Upload backup".
-
-Sélectionner le fichier "country_data.sql" afin de remplir la table "country" précédemment créée.
+Ouvrir le fichier [country_data.sql](https://github.com/MaximeVeysseyre/Countries-In-Number/blob/master/country_data.sql) et copier/coller l'ensemble des données directement dans le "Browser" d'ElephantSQL.
 
 
 ### Création d'une fonction SQL "country_infos"
@@ -84,35 +111,10 @@ END; $$;
 ```
 
 
-### Création d'une fonction SQL "add_insertion_date"
+### Création d'une fonction SQL "density_slice_1" pour l'ensemble des pays
 
 ```sql
-CREATE FUNCTION add_insertion_date()
-RETURNS trigger 
-LANGUAGE plpgsql
-AS $$
-BEGIN
-NEW.insertion_date := current_timestamp;
-RETURN NEW;
-END; $$; 
-```
-
-
-### Création d'un trigger "insertion_date"
-
-```sql
-CREATE TRIGGER trigger_insertion_date
-BEFORE INSERT OR UPDATE
-ON country
-FOR EACH ROW
-EXECUTE FUNCTION add_insertion_date(); 
-```
-
-
-### Création d'une fonction SQL "density_slice"
-
-```sql
-CREATE FUNCTION density_slice ()
+CREATE FUNCTION density_slice_1 ()
 RETURNS TABLE (
 country_name VARCHAR,
 density_slice TEXT
@@ -131,6 +133,31 @@ END AS "density_slice"
 FROM country
 ORDER BY density_slice;
 END; $$; 
+```
+
+
+### Création d'une fonction SQL "density_slice_2" pour un pays spécifique
+
+```sql
+CREATE FUNCTION density_slice_2 (country_choice TEXT)
+RETURNS TABLE (
+country_name VARCHAR,
+density_slice TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+RETURN query
+SELECT country.country_name,
+CASE 
+WHEN country.density < 500 THEN 'Slice 1'
+WHEN country.density < 1000 THEN 'Slice 2'
+WHEN country.density < 1500 THEN 'Slice 3'
+ELSE 'Slice 4' 
+END AS "density slice"
+FROM country
+WHERE country.country_name = country_choice;
+END; $$;
 ```
 
 
@@ -161,10 +188,17 @@ SELECT * FROM country_infos ('Hoenn');
 ```
 
 
-### Utilisation de la fonction "density_slice"
+### Utilisation de la fonction "density_slice_1" pour l'ensemble des pays
 
 ```sql
-SELECT * FROM density_slice ();
+SELECT * FROM density_slice_1 ();
+```
+
+
+### Utilisation de la fonction "density_slice_2" pour un pays spécifique
+
+```sql
+SELECT * FROM density_slice_2 ('France');
 ```
 
 

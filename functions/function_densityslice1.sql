@@ -1,4 +1,4 @@
-CREATE FUNCTION density_slice ()
+CREATE FUNCTION density_slice_1 ()
 RETURNS TABLE (
 country_name VARCHAR,
 density_slice TEXT
@@ -19,4 +19,4 @@ ORDER BY density_slice;
 END; $$;
 
 
-SELECT * FROM density_slice ();
+SELECT * FROM density_slice_1 ();

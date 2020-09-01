@@ -1,11 +1,3 @@
-CREATE TABLE IF NOT EXISTS "country" (
-"country_name" TEXT NULL,
-"pop" INT NULL,
-"density" INT NULL,
-"land_area" INT NULL,
-"insertion_date" TIMESTAMP DEFAULT NOW()
-);
-
 INSERT INTO country VALUES
 ('China',1438207241,153,9388211),
 ('India',1377233523,464,2973190),
