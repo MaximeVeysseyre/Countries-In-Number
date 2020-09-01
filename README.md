@@ -34,7 +34,7 @@ insertion_date TIMESTAMP DEFAULT NOW()
 
 ### Insertion des données dans la table "country"
 
-Se rendre dans l'onglet "Backup" puis "Upload backup".
+Se rendre dans l'onglet "Backup" d'ElephantSQL puis "Upload backup".
 
 Sélectionner le fichier "country_data.sql" afin de remplir la table "country" précédemment créée.
 
@@ -170,6 +170,7 @@ SELECT * FROM density_slice ();
 
 ## **Auteur**
 
-**VEYSSEYRE Maxime**
-**P3 - DATA IA - Clermont-Ferrand**
+VEYSSEYRE Maxime
+
+P3 - DATA IA - Clermont-Ferrand
 
