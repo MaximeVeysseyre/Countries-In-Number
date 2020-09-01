@@ -16,7 +16,7 @@ SELECT
 country.country_name,
 country.pop,
 country.density,
-country.land_area
+country.land_area,
 country.insertion_date
 FROM
 country
