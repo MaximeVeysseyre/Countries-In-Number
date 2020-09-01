@@ -136,9 +136,40 @@ END; $$;
 
 ## **Utilisation**
 
+### Utilisation de la fonction country_infos
+
+```
+SELECT * FROM country_infos ('France');
+```
+
+
+### Utilisation de la procédure fake_country
+
+```
+CALL fake_country('Kanto');
+CALL fake_country('Johto');
+CALL fake_country('Hoenn');
+```
+
+
+### Vérification que le trigger "insertion_date" fonctionne
+
+```
+SELECT * FROM country_infos ('Kanto');
+SELECT * FROM country_infos ('Johto');
+SELECT * FROM country_infos ('Hoenn');
+```
+
+
+### Utilisation de la fonction "density_slice"
+
+```
+SELECT * FROM density_slice ();
+```
 
 
 ## **Auteur**
 
-
+**VEYSSEYRE Maxime**
+**P3 - DATA IA - Clermont-Ferrand**
 
