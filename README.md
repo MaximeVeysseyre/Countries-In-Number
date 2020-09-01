@@ -35,6 +35,7 @@ insertion_date TIMESTAMP DEFAULT NOW()
 ### Insertion des données dans la table "country"
 
 Se rendre dans l'onglet "Backup" puis "Upload backup".
+
 Sélectionner le fichier "country_data.sql" afin de remplir la table "country" précédemment créée.
 
 
