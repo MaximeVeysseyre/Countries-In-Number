@@ -21,7 +21,7 @@ Récolte d'informations basiques sur les pays ainsi que manipulation des donnée
 
 ### Création de la table "country"
 
-``` 
+```sql
 CREATE TABLE IF NOT EXISTS "country"
 (
 country_name VARCHAR PRIMARY KEY,
@@ -41,7 +41,7 @@ Sélectionner le fichier "country_data.sql" afin de remplir la table "country" p
 
 ### Création d'une fonction SQL "country_infos"
 
-``` 
+```sql
 CREATE FUNCTION country_infos (
 country_choice VARCHAR
 ) 
@@ -72,7 +72,7 @@ END; $$;
 
 ### Création d'une procédure SQL "fake_country"
 
-``` 
+```sql
 CREATE PROCEDURE fake_country (
 IN fake_country_name VARCHAR
 )
@@ -86,7 +86,7 @@ END; $$;
 
 ### Création d'une fonction SQL "add_insertion_date"
 
-``` 
+```sql
 CREATE FUNCTION add_insertion_date()
 RETURNS trigger 
 LANGUAGE plpgsql
@@ -100,7 +100,7 @@ END; $$;
 
 ### Création d'un trigger "insertion_date"
 
-``` 
+```sql
 CREATE TRIGGER trigger_insertion_date
 BEFORE INSERT OR UPDATE
 ON country
@@ -111,7 +111,7 @@ EXECUTE FUNCTION add_insertion_date();
 
 ### Création d'une fonction SQL "density_slice"
 
-``` 
+```sql
 CREATE FUNCTION density_slice ()
 RETURNS TABLE (
 country_name VARCHAR,
@@ -138,14 +138,14 @@ END; $$;
 
 ### Utilisation de la fonction country_infos
 
-```
+```sql
 SELECT * FROM country_infos ('France');
 ```
 
 
 ### Utilisation de la procédure fake_country
 
-```
+```sql
 CALL fake_country('Kanto');
 CALL fake_country('Johto');
 CALL fake_country('Hoenn');
@@ -154,7 +154,7 @@ CALL fake_country('Hoenn');
 
 ### Vérification que le trigger "insertion_date" fonctionne
 
-```
+```sql
 SELECT * FROM country_infos ('Kanto');
 SELECT * FROM country_infos ('Johto');
 SELECT * FROM country_infos ('Hoenn');
@@ -163,7 +163,7 @@ SELECT * FROM country_infos ('Hoenn');
 
 ### Utilisation de la fonction "density_slice"
 
-```
+```sql
 SELECT * FROM density_slice ();
 ```
 
