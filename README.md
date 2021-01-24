@@ -1,210 +1,52 @@
 # Countries-In-Number
 
+Reprenez votre brief "Les pays en chiffre" pour recréer une base de données Mongo et déporter la logique (procédure et fonction) dans une API construite en Flask.
+
+
 ## **Description**
 
 Projet individuel "Les pays en chiffres".
 
-Utilisation obligatoire de PostGreSQL ainsi que du SaaS ElephantSQL. 
+Création d'une base de données Mongo DB
 
-Interdiction de l'utilisation de Python.
+Utilisation de Mongo Compass pour la visualisation des données.
+
+Utilisation de Flask afin de requêter sur notre base de données.
 
 Récolte d'informations basiques sur les pays ainsi que manipulation des données.
 
 
-## **Pré-requis**
-
-1. Création d'un compte ElephantSQL.
-2. Création d'une instance au sein d'ElephantSQL.
-3. L'ensemble du code devra être inséré au sein du "Browser" d'ElephantSQL.
-
-
 ## **Installation**
 
-### Création de la table "country"
-
-```sql
-CREATE TABLE IF NOT EXISTS "country"
-(
-country_name VARCHAR PRIMARY KEY,
-pop INTEGER NOT NULL,
-density INTEGER NOT NULL,
-land_area INTEGER NOT NULL,
-insertion_date TIMESTAMP
-);
-```
+Exécution du fichier main.py
+Se rendre à l'adresse "http://localhost:8080/" dans votre navigateur internet.
 
 
-### Création d'une fonction SQL "add_insertion_date"
+### Requête 1
 
-*Il s'agit de la fonction appelée par le trigger (Voir étape suivante).*
+Création d'une fonction qui retourne le pays qui correspond au critère passé en paramètre. Ce paramètre est le nom du pays.
 
-```sql
-CREATE FUNCTION add_insertion_date()
-RETURNS trigger 
-LANGUAGE plpgsql
-AS $$
-BEGIN
-NEW.insertion_date := current_timestamp;
-RETURN NEW;
-END; $$; 
-```
+Adresse : "http://localhost:8080//api/request_country/<name>"
+
+Exemple : "http://localhost:8080//api/request_country/France"
 
 
-### Création d'un trigger "insertion_date"
+### Requête 2
 
-```sql
-CREATE TRIGGER trigger_insertion_date
-BEFORE INSERT OR UPDATE
-ON country
-FOR EACH ROW
-EXECUTE FUNCTION add_insertion_date(); 
-```
+Création d'une fonction qui insert un nouveau pays avec des données aléatoires (On précise uniquement le pays).
+
+Adresse : "http://localhost:8080///api/add_fake/<fake_name>"
+
+Exemple : "http://localhost:8080///api/add_fake/MarioWorld"
 
 
-### Insertion des données dans la table "country"
+### Requête 3
 
-Ouvrir le fichier [country_data.sql](https://github.com/MaximeVeysseyre/Countries-In-Number/blob/master/country_data.sql) et copier/coller l'ensemble des données directement dans le "Browser" d'ElephantSQL.
+Réalisation d'une fonction pour retourner les pays qui sont regroupés par 4 tranches de densité de population.
 
-
-### Création d'une fonction SQL "country_infos"
-
-```sql
-CREATE FUNCTION country_infos (
-country_choice VARCHAR
-) 
-RETURNS TABLE (
-country_name VARCHAR,
-pop INTEGER,
-density INTEGER,
-land_area INTEGER,
-insertion_date TIMESTAMP
-) 
-LANGUAGE plpgsql
-AS $$
-BEGIN
-RETURN query
-SELECT
-country.country_name,
-country.pop,
-country.density,
-country.land_area,
-country.insertion_date
-FROM
-country
-WHERE
-country.country_name = country_choice;
-END; $$; 
-```
-
-
-### Création d'une procédure SQL "fake_country"
-
-```sql
-CREATE PROCEDURE fake_country (
-IN fake_country_name VARCHAR
-)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-INSERT INTO country (country_name, pop, density, land_area) VALUES (fake_country_name, 10000000 * RANDOM(), 1000 * RANDOM(), 10000000 * RANDOM());
-END; $$; 
-```
-
-
-### Création d'une fonction SQL "density_slice_1" pour l'ensemble des pays
-
-```sql
-CREATE FUNCTION density_slice_1 ()
-RETURNS TABLE (
-country_name VARCHAR,
-density_slice TEXT
-)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-RETURN query
-SELECT country.country_name,
-CASE
-WHEN country.density < 500 THEN 'Slice 1'
-WHEN country.density < 1000 THEN 'Slice 2'
-WHEN country.density < 1500 THEN 'Slice 3'
-ELSE 'Slice 4'
-END AS "density_slice"
-FROM country
-ORDER BY density_slice;
-END; $$; 
-```
-
-
-### Création d'une fonction SQL "density_slice_2" pour un pays spécifique
-
-```sql
-CREATE FUNCTION density_slice_2 (country_choice TEXT)
-RETURNS TABLE (
-country_name VARCHAR,
-density_slice TEXT
-)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-RETURN query
-SELECT country.country_name,
-CASE 
-WHEN country.density < 500 THEN 'Slice 1'
-WHEN country.density < 1000 THEN 'Slice 2'
-WHEN country.density < 1500 THEN 'Slice 3'
-ELSE 'Slice 4' 
-END AS "density slice"
-FROM country
-WHERE country.country_name = country_choice;
-END; $$;
-```
-
-
-## **Utilisation**
-
-### Utilisation de la fonction country_infos
-
-```sql
-SELECT * FROM country_infos ('France');
-```
-
-
-### Utilisation de la procédure fake_country
-
-```sql
-CALL fake_country('Kanto');
-CALL fake_country('Johto');
-CALL fake_country('Hoenn');
-```
-
-
-### Vérification que le trigger "insertion_date" fonctionne
-
-```sql
-SELECT * FROM country_infos ('Kanto');
-SELECT * FROM country_infos ('Johto');
-SELECT * FROM country_infos ('Hoenn');
-```
-
-
-### Utilisation de la fonction "density_slice_1" pour l'ensemble des pays
-
-```sql
-SELECT * FROM density_slice_1 ();
-```
-
-
-### Utilisation de la fonction "density_slice_2" pour un pays spécifique
-
-```sql
-SELECT * FROM density_slice_2 ('France');
-```
+Adresse : "http://localhost:8080///api/request_density/slice"
 
 
 ## **Auteur**
 
 VEYSSEYRE Maxime
-
-P3 - DATA IA - Clermont-Ferrand
-

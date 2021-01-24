@@ -1,6 +1,9 @@
-from config.ressources import *
 from pymongo import MongoClient
 import random
+
+from config.ressources import *
+
+from bson.int64 import Int64
 
 
 class DatabaseManager:
@@ -32,37 +35,17 @@ class DatabaseManager:
 
 
     def __get_collection(self, db_name, collection_name):
-        """
-        Generic method to connect to a given collection in a given database
-        If the database or the collection don't exist, it will be created
-        Args:
-            db_name (str): name of the database
-            collection_name (str): name of the collection
-        Returns:
-            collection: the collection
-        """
+        
         return self.__client.get_database(db_name).get_collection(collection_name)
 
 
     def get_country_by_name(self, name):
-        """
-        Get a country by its given name
-        Args:
-            name (str): name of the country
-        Returns:
-            json: informations about the country
-        """
+
         return self.__get_collection('client-roi', 'country').find_one({'country_name': name})
     
 
     def add_fake_country(self, fake_name):
-        """
-        Insert a fake country by its given name
-        Args:
-            fake_name (str): name of the fake country
-        Returns:
-            json: informations about the fake country
-        """
+
         density = random.randint(10, 1000)
         land_area = random.randint(100000, 1000000)
         pop = random.randint(10000, 10000000)
@@ -78,6 +61,17 @@ class DatabaseManager:
         return self.__get_collection('client-roi', 'country').find_one({'country_name': fake_name})
     
 
-    # def get_density_slice(self, name):
+    def get_density_slice(self):
 
-    #     density_1 = {}
+        density_1 = {'density': {"$lt" : Int64(200)}}
+        density_2 = {'density': {"$gt" : Int64(200), "$lt" : Int64(400)}}
+        density_3 = {'density': {"$gt" : Int64(400), "$lt" : Int64(600)}}
+        density_4 = {'density': {"$gt" : Int64(600)}}
+
+        density_slice_1 = self.__get_collection('client-roi', 'country').find(density_1)
+        density_slice_2 = self.__get_collection('client-roi', 'country').find(density_2)
+        density_slice_3 = self.__get_collection('client-roi', 'country').find(density_3)
+        density_slice_4 = self.__get_collection('client-roi', 'country').find(density_4)
+
+        return {'Slice 1' : density_slice_1, 'Slice 2' : density_slice_2, 'Slice 3' : density_slice_3, 'Slice 4' : density_slice_4}
+        

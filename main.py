@@ -1,6 +1,4 @@
 import json
-import requests
-
 from bson.json_util import dumps
 from flask import Flask
 
@@ -16,24 +14,24 @@ def hello():
     return {"welcome_message": "Hello World"}
 
 
-@app.route("/api/request_country/<name>")
+@app.route("/api/request_country/<name>", methods=['GET'])
 def route_country_by_name(name: str):
 
     content = json.loads(dumps(db.getInstance().get_country_by_name(name)))
     return content
 
 
-@app.route("/api/add_fake/<fake_name>")
+@app.route("/api/add_fake/<fake_name>", methods=['GET'])
 def route_fake_country(fake_name: str):
 
     content = json.loads(dumps(db.getInstance().add_fake_country(fake_name)))
     return content
 
 
-@app.route("/api/request_density/<name>")
-def route_density_slice(name: str):
+@app.route("/api/request_density/slice", methods=['GET'])
+def route_density_slice():
 
-    content = json.loads(dumps(db.getInstance().get_density_slice(name)))
+    content = json.loads(dumps(db.getInstance().get_density_slice()))
     return content
 
 
