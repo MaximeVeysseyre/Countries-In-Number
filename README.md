@@ -26,7 +26,7 @@ Se rendre à l'adresse "http://localhost:8080/" dans votre navigateur internet.
 
 Création d'une fonction qui retourne le pays qui correspond au critère passé en paramètre. Ce paramètre est le nom du pays.
 
-Adresse : "http://localhost:8080//api/request_country/<name>"
+Adresse : "http://localhost:8080//api/request_country/"
 
 Exemple : "http://localhost:8080//api/request_country/France"
 
@@ -35,7 +35,7 @@ Exemple : "http://localhost:8080//api/request_country/France"
 
 Création d'une fonction qui insert un nouveau pays avec des données aléatoires (On précise uniquement le pays).
 
-Adresse : "http://localhost:8080///api/add_fake/<fake_name>"
+Adresse : "http://localhost:8080///api/add_fake/"
 
 Exemple : "http://localhost:8080///api/add_fake/MarioWorld"
 
